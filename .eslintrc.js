@@ -8,8 +8,6 @@ module.exports = {
   root: true,
   rules: {
     'no-console': 'error',
-    quotes: ['error', 'single'],
     'no-trailing-spaces': 'error',
-    'eol-last': ['error', 'always'],
   },
 };

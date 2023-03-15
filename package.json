@@ -8,7 +8,8 @@
     "lint": "eslint ./src",
     "format": "npx prettier --write .",
     "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -d ./src/modules/db/data-source.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,8 @@
     "@typescript-eslint/parser": "^5.54.1",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.7.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
     "prettier": "^2.8.4",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
@@ -39,5 +42,8 @@
     "tslib": "^2.5.0",
     "typeorm": "^0.3.12",
     "winston": "^3.8.2"
+  },
+  "lint-staged": {
+    "**/*.ts": ["eslint", "prettier --write"]
   }
 }

@@ -11,7 +11,6 @@ const env = cleanEnv(process.env, {
   }),
 });
 
-// TODO hide passwords
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: env.APP_DB_HOST,
