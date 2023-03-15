@@ -1,7 +1,6 @@
 import 'dotenv/config';
 
 import { NestFactory } from '@nestjs/core';
-import { createLogger, transports, format } from 'winston';
 import { WinstonModule } from 'nest-winston';
 
 import { AppModule } from './app.module';
@@ -9,15 +8,7 @@ import { Telegraf } from 'telegraf';
 import { logMiddleware } from './modules/telegraf/log.middleware';
 import { asyncHandlerWrapper } from './modules/telegraf/async-handler.wrapper';
 import { chatTypePredicate } from './modules/telegraf/telegraf.filter';
-
-const logger = createLogger({
-  level: process.env.APP_LOG_LEVEL || 'info',
-  transports: [
-    new transports.Console({
-      format: format.simple(),
-    }),
-  ],
-});
+import { logger } from './logger';
 
 async function main(): Promise<void> {
   const app = await NestFactory.createApplicationContext(AppModule, {

@@ -11,5 +11,6 @@ module.exports = {
     'quotes': ['error', 'single'],
     'max-len': ['error', { 'code': 128, tabWidth: 2 }],
     'no-trailing-spaces': 'error',
+    'eol-last': ['error', 'always']
   },
 };

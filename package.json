@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc -p .",
     "lint": "eslint ./src",
+    "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -d ./src/modules/db/data-source.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -22,15 +23,18 @@
   "dependencies": {
     "@nestjs/common": "^9.3.9",
     "@nestjs/core": "^9.3.9",
+    "@nestjs/typeorm": "^9.0.1",
     "@types/lodash": "^4.14.191",
     "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
     "lodash": "^4.17.21",
     "nest-winston": "^1.9.1",
+    "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "telegraf": "^4.12.2",
     "tslib": "^2.5.0",
+    "typeorm": "^0.3.12",
     "winston": "^3.8.2"
   }
 }
