@@ -1,4 +1,4 @@
-import { cleanEnv, str } from 'envalid'
+import { cleanEnv, str } from 'envalid';
 import { once } from 'lodash';
 
 export const getTelegrafConfig = once(() => {

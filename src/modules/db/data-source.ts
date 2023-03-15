@@ -19,8 +19,6 @@ export const AppDataSource = new DataSource({
   username: env.APP_DB_USERNAME,
   password: env.APP_DB_PASSWORD,
   entities,
-  migrations: [
-    join(__dirname, 'migrations', '*.{ts,js}'),
-  ],
+  migrations: [join(__dirname, 'migrations', '*.{ts,js}')],
   migrationsTableName: 'migrations',
 });

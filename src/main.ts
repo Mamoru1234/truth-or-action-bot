@@ -19,21 +19,29 @@ async function main(): Promise<void> {
   app.enableShutdownHooks();
   logger.info('Launching bot');
   const bot = app.get(Telegraf);
-  bot.use(logMiddleware((mes, update) => logger.info(mes, {
-    update,
-  })));
+  bot.use(
+    logMiddleware((mes, update) =>
+      logger.info(mes, {
+        update,
+      })
+    )
+  );
   const privateChat = chatTypePredicate('private');
-  bot.start(asyncHandlerWrapper(async (ctx) => {
-    if (privateChat(ctx.update)) {
-      await ctx.sendMessage('Hi please send me a token');
-      return;
-    }
-    await ctx.sendMessage('Hi veerify your chat in PM');
-  }, logger));
-  bot.use(asyncHandlerWrapper(async (ctx) => {
-    logger.info('received unknown message');
-    await ctx.sendMessage('Something went wrong')
-  }, logger));
+  bot.start(
+    asyncHandlerWrapper(async (ctx) => {
+      if (privateChat(ctx.update)) {
+        await ctx.sendMessage('Hi please send me a token');
+        return;
+      }
+      await ctx.sendMessage('Hi veerify your chat in PM');
+    }, logger)
+  );
+  bot.use(
+    asyncHandlerWrapper(async (ctx) => {
+      logger.info('received unknown message');
+      await ctx.sendMessage('Something went wrong');
+    }, logger)
+  );
   await bot.launch();
 }
 
