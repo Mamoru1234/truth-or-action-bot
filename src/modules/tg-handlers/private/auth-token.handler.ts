@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Context } from 'telegraf';
 import { Repository } from 'typeorm';
+import { ActiveStepEntity } from '../../db/entities/active-step.entity';
 import { ChatSessionEntity, ChatType } from '../../db/entities/chat-session.entity';
 import { getAuthToken } from './auth-token.config';
 
@@ -12,8 +13,11 @@ export class PrivateAuthTokenHandler {
 
   constructor(
     @InjectRepository(ChatSessionEntity)
-    private readonly sessionRepository: Repository<ChatSessionEntity>
+    private readonly sessionRepository: Repository<ChatSessionEntity>,
+    @InjectRepository(ActiveStepEntity)
+    private readonly activeStepRepository: Repository<ActiveStepEntity>,
   ) {}
+
   async handle(ctx: Context): Promise<void> {
     if (!ctx.chat) {
       throw new Error('No chat in ctx');
@@ -28,12 +32,18 @@ export class PrivateAuthTokenHandler {
       return;
     }
     this.logger.log('Handling auth token');
-    await this.sessionRepository.save([
+    const [session] = await this.sessionRepository.save([
       {
         tgId: `${ctx.chat.id}`,
         type: ChatType.PRIVATE,
       },
     ]);
-    await ctx.sendMessage('Ok got it');
+    await this.activeStepRepository.save([
+      {
+        type: 'INIT',
+        session,
+      },
+    ]);
+    await ctx.sendMessage('Ok got it. Now you can start game.');
   }
 }
