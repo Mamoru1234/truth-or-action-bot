@@ -9,6 +9,7 @@ import { getTelegrafConfig } from './telegraf.config';
       useFactory: () => new Telegraf(getTelegrafConfig().token),
     },
   ],
+  exports: [Telegraf],
 })
 export class TelegrafModule implements OnApplicationShutdown {
   private readonly logger = new Logger(TelegrafModule.name);

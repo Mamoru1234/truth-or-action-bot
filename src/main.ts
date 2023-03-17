@@ -5,10 +5,8 @@ import { WinstonModule } from 'nest-winston';
 
 import { AppModule } from './app.module';
 import { Telegraf } from 'telegraf';
-import { logMiddleware } from './modules/telegraf/log.middleware';
-import { asyncHandlerWrapper } from './modules/telegraf/async-handler.wrapper';
-import { chatTypePredicate } from './modules/telegraf/telegraf.filter';
 import { logger } from './logger';
+import { TgRouterService } from './modules/tg-router/tg-router.service';
 
 async function main(): Promise<void> {
   const app = await NestFactory.createApplicationContext(AppModule, {
@@ -19,29 +17,8 @@ async function main(): Promise<void> {
   app.enableShutdownHooks();
   logger.info('Launching bot');
   const bot = app.get(Telegraf);
-  bot.use(
-    logMiddleware((mes, update) =>
-      logger.info(mes, {
-        update,
-      })
-    )
-  );
-  const privateChat = chatTypePredicate('private');
-  bot.start(
-    asyncHandlerWrapper(async (ctx) => {
-      if (privateChat(ctx.update)) {
-        await ctx.sendMessage('Hi please send me a token');
-        return;
-      }
-      await ctx.sendMessage('Hi veerify your chat in PM');
-    }, logger)
-  );
-  bot.use(
-    asyncHandlerWrapper(async (ctx) => {
-      logger.info('received unknown message');
-      await ctx.sendMessage('Something went wrong');
-    }, logger)
-  );
+  const router = app.get(TgRouterService);
+  router.configure();
   await bot.launch();
 }
 
