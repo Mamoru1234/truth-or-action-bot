@@ -8,6 +8,7 @@
     "lint": "eslint ./src",
     "format": "npx prettier --write .",
     "typeorm": "npx ts-node -r dotenv/config ./node_modules/typeorm/cli.js -d ./src/modules/db/data-source.ts",
+    "migration:run": "npm run typeorm migration:run",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },

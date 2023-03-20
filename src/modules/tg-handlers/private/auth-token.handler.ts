@@ -1,13 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Context } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
 import { Repository } from 'typeorm';
 import { ActiveStepEntity } from '../../db/entities/active-step.entity';
 import { ChatSessionEntity, ChatType } from '../../db/entities/chat-session.entity';
+import { combine, runWithGuard } from '../../telegraf/run-with-guard.wrapper';
+import { SessionGuardFactory } from '../../tg-guards/session-guard.factory';
+import { getTextFromCtx } from '../tg-context.utils';
+import { TgHandler } from '../tg-handlers.service';
 import { getAuthToken } from './auth-token.config';
+import { privateChat } from './guard.constants';
 
 @Injectable()
-export class PrivateAuthTokenHandler {
+export class PrivateAuthTokenHandler implements TgHandler {
   private readonly logger = new Logger(PrivateAuthTokenHandler.name);
   private readonly correctAuthToken = getAuthToken();
 
@@ -16,17 +21,22 @@ export class PrivateAuthTokenHandler {
     private readonly sessionRepository: Repository<ChatSessionEntity>,
     @InjectRepository(ActiveStepEntity)
     private readonly activeStepRepository: Repository<ActiveStepEntity>,
+    private readonly sessionGuardFactory: SessionGuardFactory,
   ) {}
+
+  configure(bot: Telegraf): void {
+    bot.use(runWithGuard(combine(privateChat, this.sessionGuardFactory.noSession()), this.logger, (ctx) => this.handle(ctx)));
+  }
 
   async handle(ctx: Context): Promise<void> {
     if (!ctx.chat) {
       throw new Error('No chat in ctx');
     }
-    if (!ctx.message || !('text' in ctx.message)) {
+    const token = getTextFromCtx(ctx);
+    if (token === null) {
       await ctx.sendMessage('Please send me a token');
       return;
     }
-    const token = ctx.message.text;
     if (token.trim() !== this.correctAuthToken) {
       await ctx.sendMessage('Please send me a token');
       return;
