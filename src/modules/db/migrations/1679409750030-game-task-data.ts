@@ -72,6 +72,46 @@ export class gameTaskData1679409750030 implements MigrationInterface {
           type: GameTaskType.Truth,
           text: 'Чи має для тебе значення думка оточуючих?',
         },
+        {
+          type: GameTaskType.Action,
+          text: 'Зателефонуй за якимось з оголошень і запроси на побачення людину, яка тобі відповіла',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Ти залишаєш чайові?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Першого гравця, що сидить ліворуч, поцілуй, другого обійми, третьому потисни руку',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Кого із всесвітньовідомих людей ти б узяв(-ла) собі за раба?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Говори про себе в третій особі протягом 5 хвилин',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Розкажи найсмішніший анекдот',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Зроби для кожного гравця медаль з підручних засобів із написом "Най.."(придумай сам)',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Ти читав(-ла) чужі листи або повідомлення',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Зайди на будь-який жіночий форум і створи там тему: "Всі баби дурепи, ви повну хрінь тут обговорюєте"',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Можеш змінити якусь особисту якісь. Чого ти хочеш позбутися насамперед?',
+        },
       ]);
     await queryRunner.query(...query.getQueryAndParameters());
   }
