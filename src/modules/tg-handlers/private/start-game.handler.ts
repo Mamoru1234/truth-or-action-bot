@@ -29,10 +29,7 @@ export class PrivateStartGameHandler implements TgHandler {
   }
 
   async handle(ctx: Context): Promise<void> {
-    const session = await this.chatSessionFetcher.getSession(ctx);
-    if (!session) {
-      throw new Error('No session');
-    }
+    const session = await this.chatSessionFetcher.require(ctx);
     this.logger.log('Start game');
     await this.activeStepRepository.update(
       {
@@ -42,6 +39,6 @@ export class PrivateStartGameHandler implements TgHandler {
         type: PrivateSetGamePlayersHandler.STEP_NAME,
       },
     );
-    await ctx.sendMessage('Send me players. Send done to complete');
+    await ctx.sendMessage('Надішли мені список гравців.');
   }
 }

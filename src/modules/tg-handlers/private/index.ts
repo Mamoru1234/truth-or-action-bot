@@ -1,4 +1,6 @@
 import { PrivateAuthTokenHandler } from './auth-token.handler';
+import { PrivateGameFlowHandler } from './game-flow.handler';
+import { PrivateOrderPlayersHandler } from './order-players.handler';
 import { PrivateSetGamePlayersHandler } from './set-game-players.handler';
 import { PrivateStartCommandHandler } from './start-command.handler';
 import { PrivateStartGameHandler } from './start-game.handler';
@@ -8,4 +10,6 @@ export const privateHanders = [
   PrivateAuthTokenHandler,
   PrivateStartGameHandler,
   PrivateSetGamePlayersHandler,
+  PrivateOrderPlayersHandler,
+  PrivateGameFlowHandler,
 ];

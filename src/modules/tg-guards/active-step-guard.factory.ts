@@ -9,7 +9,7 @@ export class ActiveStepGuardFactory {
 
   byType(type: string): Guard {
     return async (ctx: Context) => {
-      const activeStep = await this.activeStepFetcher.getActiveStep(ctx);
+      const activeStep = await this.activeStepFetcher.get(ctx);
       if (!activeStep) {
         return false;
       }

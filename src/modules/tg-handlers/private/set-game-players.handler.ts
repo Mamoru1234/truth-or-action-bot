@@ -12,6 +12,7 @@ import { ChatSessionFetcher } from '../../tg-session-data/chat-session.fetcher';
 import { getTextFromCtx } from '../tg-context.utils';
 import { TgHandler } from '../tg-handlers.service';
 import { privateChat } from './guard.constants';
+import { PrivateOrderPlayersHandler } from './order-players.handler';
 
 interface SetGamePlayersData {
   approvedPlayers: string[];
@@ -31,26 +32,24 @@ export class PrivateSetGamePlayersHandler implements TgHandler {
     private readonly activeStepRepository: Repository<ActiveStepEntity>,
     private readonly chatSessionFetcher: ChatSessionFetcher,
     private readonly activeStepFetcher: ActiveStepFetcher,
+    private readonly privateOrderPlayersHandler: PrivateOrderPlayersHandler,
   ) {}
 
   private async handleParsePlayers(ctx: Context): Promise<void> {
     const rawPlayersText = getTextFromCtx(ctx);
     if (rawPlayersText === null) {
-      await ctx.sendMessage('Please send me players text');
+      await ctx.sendMessage('Пш пш поганий зв`язок не бачу списку');
       return;
     }
-    const activeStep = await this.activeStepFetcher.getActiveStep(ctx);
-    if (!activeStep) {
-      throw new Error('No active step');
-    }
+    const activeStep = await this.activeStepFetcher.require(ctx);
     const approvedPlayers = (activeStep.data as SetGamePlayersData)?.approvedPlayers ?? [];
     if (rawPlayersText.toLowerCase().includes('done')) {
       if (approvedPlayers.length === 0) {
         await ctx.sendMessage('No players in game');
         return;
       }
-      // TODO handle this
-      await ctx.sendMessage('Okey we are done with players');
+      await ctx.sendMessage('Okey we are done with players.');
+      await this.privateOrderPlayersHandler.startFlow(approvedPlayers, ctx);
       return;
     }
     const players = rawPlayersText
@@ -66,7 +65,7 @@ export class PrivateSetGamePlayersHandler implements TgHandler {
       await ctx.sendMessage('No new players');
       return;
     }
-    const session = await this.chatSessionFetcher.getSession(ctx);
+    const session = await this.chatSessionFetcher.require(ctx);
     await this.activeStepRepository.update(
       {
         session,
@@ -97,12 +96,10 @@ ${playersMessage}
       await ctx.sendMessage('Please send me yes/no response');
       return;
     }
-    const activeStep = await this.activeStepFetcher.getActiveStep(ctx);
-    if (!activeStep) {
-      throw new Error('No active step');
-    }
-    const approvedPlayers = (activeStep.data as SetGamePlayersData)?.approvedPlayers ?? [];
-    const targetPlayers = (activeStep.data as SetGamePlayersData)?.targetPlayers ?? [];
+    const activeStep = await this.activeStepFetcher.require(ctx);
+    const data = activeStep.data as SetGamePlayersData;
+    const approvedPlayers = data?.approvedPlayers ?? [];
+    const targetPlayers = data?.targetPlayers ?? [];
     if (targetPlayers.length === 0) {
       throw new Error('No target players found');
     }
@@ -112,7 +109,7 @@ ${playersMessage}
     } else {
       await ctx.sendMessage('I will skip this players, please send new players');
     }
-    const session = await this.chatSessionFetcher.getSession(ctx);
+    const session = await this.chatSessionFetcher.require(ctx);
     await this.activeStepRepository.update(
       {
         session,

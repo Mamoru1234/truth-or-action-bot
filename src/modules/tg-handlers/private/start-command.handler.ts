@@ -28,6 +28,6 @@ export class PrivateStartCommandHandler implements TgHandler {
     await this.sessionRepository.delete({
       tgId,
     });
-    await ctx.sendMessage('Please send me a token');
+    await ctx.sendMessage('Надішли будь-ласка секрет');
   }
 }

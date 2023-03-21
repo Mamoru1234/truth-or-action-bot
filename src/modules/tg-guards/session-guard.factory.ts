@@ -8,14 +8,14 @@ export class SessionGuardFactory {
 
   noSession(): Guard {
     return async (ctx) => {
-      const session = await this.chatSessionFetcher.getSession(ctx);
+      const session = await this.chatSessionFetcher.get(ctx);
       return session === null;
     };
   }
 
   withSession(): Guard {
     return async (ctx) => {
-      const session = await this.chatSessionFetcher.getSession(ctx);
+      const session = await this.chatSessionFetcher.get(ctx);
       return session !== null;
     };
   }

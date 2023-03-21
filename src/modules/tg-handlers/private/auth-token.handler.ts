@@ -34,11 +34,11 @@ export class PrivateAuthTokenHandler implements TgHandler {
     }
     const token = getTextFromCtx(ctx);
     if (token === null) {
-      await ctx.sendMessage('Please send me a token');
+      await ctx.sendMessage('Надішли будь-ласка секрет');
       return;
     }
     if (token.trim() !== this.correctAuthToken) {
-      await ctx.sendMessage('Please send me a token');
+      await ctx.sendMessage('Надішли будь-ласка секрет');
       return;
     }
     this.logger.log('Handling auth token');
@@ -54,6 +54,6 @@ export class PrivateAuthTokenHandler implements TgHandler {
         session,
       },
     ]);
-    await ctx.sendMessage('Ok got it. Now you can start game.');
+    await ctx.sendMessage('Все отримав, дякую. Можемо починати гру.');
   }
 }

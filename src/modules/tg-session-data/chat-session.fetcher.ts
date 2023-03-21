@@ -1,28 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { isUndefined } from 'lodash';
 import { Context } from 'telegraf';
+import { Update } from 'telegraf/typings/core/types/typegram';
 import { Repository } from 'typeorm';
 import { ChatSessionEntity } from '../db/entities/chat-session.entity';
+import { BaseEntityFetcher } from './base-entity.fetcher';
 
 const SESSION_KEY = Symbol.for('CHAT_SESSION_FETCHER');
 
 @Injectable()
-export class ChatSessionFetcher {
-  constructor(@InjectRepository(ChatSessionEntity) private readonly chatSesssionRepository: Repository<ChatSessionEntity>) {}
+export class ChatSessionFetcher extends BaseEntityFetcher<ChatSessionEntity> {
+  constructor(@InjectRepository(ChatSessionEntity) private readonly chatSesssionRepository: Repository<ChatSessionEntity>) {
+    super();
+  }
 
-  async getSession(ctx: Context): Promise<ChatSessionEntity> {
+  protected async fetch(ctx: Context<Update>): Promise<ChatSessionEntity | null> {
     if (!ctx.chat) {
       throw new Error('No chat in ctx');
     }
-    if (isUndefined(ctx.state[SESSION_KEY])) {
-      const session = await this.chatSesssionRepository.findOne({
-        where: {
-          tgId: `${ctx.chat.id}`,
-        },
-      });
-      ctx.state[SESSION_KEY] = session;
-    }
-    return ctx.state[SESSION_KEY];
+    return this.chatSesssionRepository.findOne({
+      where: {
+        tgId: `${ctx.chat.id}`,
+      },
+    });
+  }
+
+  protected getEntityKey(): string | symbol {
+    return SESSION_KEY;
   }
 }
