@@ -148,6 +148,10 @@ export class PrivateGameFlowHandler implements TgHandler {
 
   private async promptTaskForPlayer(ctx: Context, taskType: GameTaskType): Promise<void> {
     const task = await this.chooseTaskForPlayer(ctx, taskType);
+    if (!task) {
+      await ctx.sendMessage('Ой в мене нема більше доступних завдань(');
+      return;
+    }
     const data = await this.activeStepDataService.getData<GameFlowData>(ctx);
     const player = data.players[data.currentPlayer];
     const typeMessage = taskType == GameTaskType.Action ? 'Дія' : 'Питання';
@@ -169,7 +173,7 @@ ${task.text}`.trim(),
     });
   }
 
-  private async chooseTaskForPlayer(ctx: Context, taskType: GameTaskType): Promise<GameTaskEntity> {
+  private async chooseTaskForPlayer(ctx: Context, taskType: GameTaskType): Promise<GameTaskEntity | null> {
     const data = await this.activeStepDataService.getData<GameFlowData>(ctx);
     const tasksUsed = data.answers.filter((it) => it.type === taskType).map((it) => it.taskId);
     const tasksAvailable = await this.gameTaskRepository.find({
@@ -179,6 +183,9 @@ ${task.text}`.trim(),
       },
       select: ['id'],
     });
+    if (tasksAvailable.length === 0) {
+      return null;
+    }
     const taskIds = tasksAvailable.map((it) => it.id);
     const indx = randomInt(taskIds.length);
     return this.gameTaskRepository.findOneOrFail({
