@@ -8,7 +8,7 @@ import { SessionGuardFactory } from '../../tg-guards/session-guard.factory';
 import { ChatSessionFetcher } from '../../tg-session-data/chat-session.fetcher';
 import { TgHandler } from '../tg-handlers.service';
 import { privateChat } from './guard.constants';
-import { PrivateSetGamePlayersHandler } from './set-game-players.handler';
+import { PrivateSimpleSetPlayersHandler } from './simple-set-game-players.handler';
 
 @Injectable()
 export class PrivateStartGameHandler implements TgHandler {
@@ -36,7 +36,7 @@ export class PrivateStartGameHandler implements TgHandler {
         session,
       },
       {
-        type: PrivateSetGamePlayersHandler.STEP_NAME,
+        type: PrivateSimpleSetPlayersHandler.STEP_NAME,
       },
     );
     await ctx.sendMessage('Надішли мені список гравців.');

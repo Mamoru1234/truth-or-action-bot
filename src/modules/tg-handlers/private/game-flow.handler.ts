@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomInt } from 'crypto';
-import { Context, Telegraf } from 'telegraf';
+import { Context, Markup, Telegraf } from 'telegraf';
 import { In, Not, Repository } from 'typeorm';
 import { GameTaskEntity, GameTaskType } from '../../db/entities/game-task.entity';
 import { combine, runWithGuard } from '../../telegraf/run-with-guard.wrapper';
@@ -61,7 +61,7 @@ export class PrivateGameFlowHandler implements TgHandler {
   }
 
   async startGame(ctx: Context, players: string[]): Promise<void> {
-    await ctx.sendMessage('Ok let`s start a game');
+    await ctx.sendMessage('Ну що ж почнемо гру.');
     await this.promptPlayer(ctx, {
       players,
       currentPlayer: 0,
@@ -151,10 +151,14 @@ export class PrivateGameFlowHandler implements TgHandler {
     const data = await this.activeStepDataService.getData<GameFlowData>(ctx);
     const player = data.players[data.currentPlayer];
     const typeMessage = taskType == GameTaskType.Action ? 'Дія' : 'Питання';
+    const keyboard = Markup.keyboard([['Ок', 'Пас']])
+      .oneTime()
+      .resize();
     await ctx.sendMessage(
       `
 ${typeMessage} для ${player}:
 ${task.text}`.trim(),
+      keyboard,
     );
     await this.activeStepDataService.updateStepData(ctx, RECORD_RESPONSE, {
       ...data,
@@ -185,8 +189,11 @@ ${task.text}`.trim(),
   }
 
   private async promptPlayer(ctx: Context, data: GameFlowData): Promise<void> {
+    const keyboard = Markup.keyboard([['Правда', 'Дія']])
+      .oneTime()
+      .resize();
     const player = data.players[data.currentPlayer];
-    await ctx.sendMessage(`${player} Що вибираєш праду чи дію?`);
+    await ctx.sendMessage(`${player} Що вибираєш праду чи дію?`, keyboard);
     await this.activeStepDataService.updateStepData(ctx, TASK_TYPE_PROMPT, data);
   }
 

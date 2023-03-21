@@ -3,7 +3,7 @@ import { GameTaskEntity, GameTaskType } from '../entities/game-task.entity';
 
 export class gameTaskData1679409750030 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.connection
+    const query = queryRunner.connection
       .createQueryBuilder()
       .insert()
       .into(GameTaskEntity)
@@ -72,8 +72,8 @@ export class gameTaskData1679409750030 implements MigrationInterface {
           type: GameTaskType.Truth,
           text: 'Чи має для тебе значення думка оточуючих?',
         },
-      ])
-      .execute();
+      ]);
+    await queryRunner.query(...query.getQueryAndParameters());
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
