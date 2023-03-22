@@ -112,6 +112,38 @@ export class gameTaskData1679409750030 implements MigrationInterface {
           type: GameTaskType.Truth,
           text: 'Можеш змінити якусь особисту якісь. Чого ти хочеш позбутися насамперед?',
         },
+        {
+          type: GameTaskType.Action,
+          text: 'Дай чесну відповідь на будь-яке запитання одного з гравців.',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Який твій найромантичніший вчинок?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Покажи першопрохідника на місяці який зустрів там бомжа.',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'У тебе є можливість помінятися з кимось місцем, хто це буде?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Скажи гравцю навпроти все, що ти про нього думаєш',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Яку країну тобі хочется відвідати найбільше?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Втримуй олівець на носі не менше 30 секунд',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Яку найнепристойнішу пропозицю ти отримував(-ла)?',
+        },
       ]);
     await queryRunner.query(...query.getQueryAndParameters());
   }
