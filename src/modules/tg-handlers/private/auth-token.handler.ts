@@ -34,11 +34,11 @@ export class PrivateAuthTokenHandler implements TgHandler {
     }
     const token = getTextFromCtx(ctx);
     if (token === null) {
-      await ctx.sendMessage('Надішли будь-ласка секрет');
+      await ctx.sendMessage('👀 Надішли будь-ласка секрет 🕵️‍♂️');
       return;
     }
     if (token.trim() !== this.correctAuthToken) {
-      await ctx.sendMessage('Надішли будь-ласка секрет');
+      await ctx.sendMessage('👀 Надішли будь-ласка секрет 🕵️‍♂️');
       return;
     }
     this.logger.log('Handling auth token');

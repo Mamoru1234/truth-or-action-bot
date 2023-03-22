@@ -39,6 +39,8 @@ export class PrivateStartGameHandler implements TgHandler {
         type: PrivateSimpleSetPlayersHandler.STEP_NAME,
       },
     );
-    await ctx.sendMessage('Надішли мені список гравців.');
+    await ctx.sendMessage(
+      'Надішли мені список гравців. Кожного гравця з окремого рядку, саме в такому порядку як маєте грати.',
+    );
   }
 }

@@ -34,6 +34,14 @@ export interface GameFlowData {
   selectedTask?: SelectedTaskData;
 }
 
+const RULES = `
+Правила:
+Гравці по черзі оберають "прада" чи "дія".
+Гравці не можуть вибирати один і той самий тип завдання більше двух разів поспіль.
+Ви маєте право відмовитись від будь-якого завдання або відповіді на запитання, але не більше двох разів за гру.
+Ставтесь до всього з гумором, адже основна мета гри - розважити вас.
+`.trim();
+
 @Injectable()
 export class PrivateGameFlowHandler implements TgHandler {
   private readonly logger = new Logger(PrivateGameFlowHandler.name);
@@ -61,7 +69,8 @@ export class PrivateGameFlowHandler implements TgHandler {
   }
 
   async startGame(ctx: Context, players: string[]): Promise<void> {
-    await ctx.sendMessage('Ну що ж почнемо гру.');
+    await ctx.sendMessage('Ну що ж почнемо гру.🏁');
+    await ctx.sendMessage(RULES);
     await this.promptPlayer(ctx, {
       players,
       currentPlayer: 0,
@@ -95,22 +104,22 @@ export class PrivateGameFlowHandler implements TgHandler {
     const data = await this.activeStepDataService.getData<GameFlowData>(ctx);
     const player = data.players[data.currentPlayer];
     if (response.toLowerCase() === 'ок') {
-      await ctx.sendMessage(`Крутяк ${player}`);
+      await ctx.sendMessage(`Крутяк ${player}💪`);
       this.recordTaskAnswer(data, true);
       await this.handleNextPlayer(ctx, data);
       return;
     }
     if (response.toLowerCase() === 'пас') {
       if (!this.verifySkipCount(data)) {
-        await ctx.sendMessage('Нажаль вже не можна пропустити завдання. Дуже сумно(ні)');
+        await ctx.sendMessage('Нажаль вже не можна пропустити завдання. Дуже сумно(ні)😈');
         return;
       }
-      await ctx.sendMessage(`Ну принаймні було весело ${player}`);
+      await ctx.sendMessage(`Ну принаймні було весело ${player}😞`);
       this.recordTaskAnswer(data, false);
       await this.handleNextPlayer(ctx, data);
       return;
     }
-    await ctx.sendMessage('Task repsponse failed');
+    await ctx.sendMessage('Щось таке не зрозуміле у відповідді спробуй ще раз🤔');
   }
 
   private recordTaskAnswer(data: GameFlowData, done: boolean): void {
@@ -142,14 +151,14 @@ export class PrivateGameFlowHandler implements TgHandler {
       return;
     }
     const taskType = lastAnswers[0].type === GameTaskType.Action ? GameTaskType.Truth : GameTaskType.Action;
-    await ctx.sendMessage('Упс в когось немає вибору.');
+    await ctx.sendMessage('Упс в когось немає вибору.🙈');
     await this.promptTaskForPlayer(ctx, taskType);
   }
 
   private async promptTaskForPlayer(ctx: Context, taskType: GameTaskType): Promise<void> {
     const task = await this.chooseTaskForPlayer(ctx, taskType);
     if (!task) {
-      await ctx.sendMessage('Ой в мене нема більше доступних завдань(');
+      await ctx.sendMessage('Ой в мене нема більше доступних завдань😞');
       return;
     }
     const data = await this.activeStepDataService.getData<GameFlowData>(ctx);
@@ -200,7 +209,7 @@ ${task.text}`.trim(),
       .oneTime()
       .resize();
     const player = data.players[data.currentPlayer];
-    await ctx.sendMessage(`${player} Що вибираєш праду чи дію?`, keyboard);
+    await ctx.sendMessage(`${player} Що вибираєш праду чи дію❓`, keyboard);
     await this.activeStepDataService.updateStepData(ctx, TASK_TYPE_PROMPT, data);
   }
 
