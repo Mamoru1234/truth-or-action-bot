@@ -55,5 +55,6 @@ export class PrivateAuthTokenHandler implements TgHandler {
       },
     ]);
     await ctx.sendMessage('Все отримав, дякую. Можемо починати гру.');
+    await ctx.sendMessage('Коли будете готові надішли мені комаду /start_game.');
   }
 }

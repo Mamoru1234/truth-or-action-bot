@@ -29,7 +29,7 @@ export class TgRouterService {
         this.logger.log('received unknown message', {
           id: ctx.update.update_id,
         });
-        await ctx.sendMessage('Sorry I don`t know what to do)');
+        await ctx.sendMessage('Вибач я тебе не розумію)');
       }),
     );
   }

@@ -5,11 +5,13 @@ import { PrivateSetGamePlayersHandler } from './set-game-players.handler';
 import { PrivateSimpleSetPlayersHandler } from './simple-set-game-players.handler';
 import { PrivateStartCommandHandler } from './start-command.handler';
 import { PrivateStartGameHandler } from './start-game.handler';
+import { PrivateStopGameHandler } from './stop-game.handler';
 
 export const privateHanders = [
   PrivateStartCommandHandler,
   PrivateAuthTokenHandler,
   PrivateStartGameHandler,
+  PrivateStopGameHandler,
   PrivateSimpleSetPlayersHandler,
   PrivateSetGamePlayersHandler,
   PrivateOrderPlayersHandler,
