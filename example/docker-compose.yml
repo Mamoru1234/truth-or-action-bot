@@ -12,14 +12,14 @@ services:
       POSTGRES_PASSWORD: ${APP_DB_PASSWORD}
 
   migration:
-    image: truth-or-action-bot:latest
+    image: oleksiygontarpersonal/truth-or-action-bot:latest
     command: npm run prod:migration:run
     env_file: .env
     depends_on:
       - db
   
   bot:
-    image: truth-or-action-bot:latest
+    image: oleksiygontarpersonal/truth-or-action-bot:latest
     env_file: .env
     depends_on:
       - db
