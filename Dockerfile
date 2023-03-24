@@ -5,9 +5,10 @@ WORKDIR /home/node
 
 ADD ./package*.json .
 
+ARG NODE_ENV=production
 ENV NODE_ENV production
 
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev && npm cache clean --force
 
 ADD ./dist ./dist
 
