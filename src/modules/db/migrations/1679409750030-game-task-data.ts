@@ -384,6 +384,30 @@ export class gameTaskData1679409750030 implements MigrationInterface {
           type: GameTaskType.Truth,
           text: 'Тебе вибрали Президентом твоєї країни. Яким буде твій перший закон?',
         },
+        {
+          type: GameTaskType.Action,
+          text: 'Розкажи якусь веселу історію зі свого життя.',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Згадай найбільш нестандартне місце, де ти займався(-лась) коханням.',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Відправ повідомлення своєму найкращому другу / подрузі з текстом: "Я усвідомив(-ла), що я дурень(дурепа)".',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Якби ти був(-ла) гнойовим жуком, чиї екскеременти ти б з`їв(-ла) першими?',
+        },
+        {
+          type: GameTaskType.Action,
+          text: 'Позіхай, допоки хтось поруч не позіхне.',
+        },
+        {
+          type: GameTaskType.Truth,
+          text: 'Можеш змінити в світі щось одне. Що саме зміниш?',
+        },
       ]);
     await queryRunner.query(...query.getQueryAndParameters());
   }
